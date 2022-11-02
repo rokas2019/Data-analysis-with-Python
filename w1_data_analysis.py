@@ -106,10 +106,10 @@ print(df.dtypes)
 print(df.head())
 
 # Applying data transformation to transform mpg into L/100km
-df['city-L/100km'] = 235/df['city-mpg']
+df['city-L/100km'] = 235 / df['city-mpg']
 
 # Applying data transformation to transform highway-mpg into highway-L/100km
-df["highway-mpg"] = 235/df["highway-mpg"]
+df["highway-mpg"] = 235 / df["highway-mpg"]
 df.rename(columns={"highway-mpg": "highway-L/100km"}, inplace=True)
 print(df.head())
 
@@ -117,7 +117,7 @@ print(df.head())
 # Replacing (original value) by (original value) / (maximum value)
 df["length"] = df["length"] / df["length"].max()
 df["width"] = df["width"] / df["width"].max()
-df["height"] = df["height"] / df["height"]. max()
+df["height"] = df["height"] / df["height"].max()
 
 # Data binning
 # Converting data to correct format
@@ -154,6 +154,36 @@ plt.pyplot.xlabel("horsepower")
 plt.pyplot.ylabel("count")
 plt.pyplot.title("horsepower bins")
 
+# Indicator Variable (or Dummy Variable)
+print(df.columns)
 
+# Get the indicator variables and assign it to data frame "dummy_variable_1"
+dummy_variable_1 = pd.get_dummies(df["fuel-type"])
+print(dummy_variable_1.head(1))
 
+# Change the column name for clarity
+dummy_variable_1.rename(columns={"gas": "fuel-type-gas", "diesel": "fuel-type-diesel"}, inplace=True)
+print(dummy_variable_1.head())
 
+# Merge data frame "df" and "dummy_variable_1"
+df = pd.concat([df, dummy_variable_1], axis=1)
+
+# Drop original column "fuel-type" from "df"
+df.drop("fuel-type", axis=1, inplace=True)
+
+# Get the indicator variables and assign it to data frame "dummy_variable_2"
+dummy_variable_2 = pd.get_dummies(df["aspiration"])
+print(dummy_variable_2.head(1))
+
+# Change the column name for clarity
+dummy_variable_2.rename(columns={"std": "aspiration-std", "turbo": "aspiration-turbo"}, inplace=True)
+print(dummy_variable_2.head)
+
+# Merge data frame "df" and "dummy_variable_2"
+df = pd.concat([df, dummy_variable_2], axis=1)
+
+# Drop original column "aspiration" from "df"
+df.drop("aspiration", axis=1, inplace=True)
+
+# Save it to csv
+df.to_csv("clean_df.csv")
